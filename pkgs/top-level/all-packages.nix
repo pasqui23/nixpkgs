@@ -732,6 +732,8 @@ with pkgs;
     novacomd = callPackage ../development/mobile/webos/novacomd.nix { };
   };
 
+  webcamoid =  libsForQt5.callPackage ../applications/graphics/webcamoid {};
+
   arc-theme = callPackage ../misc/themes/arc { };
 
   arc-kde-theme = callPackage ../misc/themes/arc-kde { };
