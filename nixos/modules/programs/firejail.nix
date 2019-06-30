@@ -50,18 +50,18 @@ in {
           chmod 0755 $out/bin/${command}
           '') cfg.wrappedBinaries)}
         '';
-
-        wrappedPkgs = with pkgs; runCommand "firejail-wrap-packages" {} ''
-          mkdir -p $out/nix/store
-          ${string.concatMapStrings (p: ''
-            cp ${p} $out
-          '') cfg.wrappedPackages}
-          ln -s {,$out}${firejail}
-          chroot $out firecfg
-          rm $out${firejail}
-          rm -rf $out/nix/store
-        '';
       };
+      wrappedPkgs = with pkgs; runCommand "firejail-wrap-packages" {} ''
+        mkdir -p $out/nix/store
+        ${string.concatMapStrings (p: ''
+          cp ${p} $out
+        '') cfg.wrappedPackages}
+        ln -s {,$out}${firejail}
+        chroot $out firecfg
+        rm $out${firejail}
+        rm -rf $out/nix/store
+      '';
+      
     in
       optional ([]!=cfg.wrappedBinaries) wrappedBins ++
       optional ([]!=cfg.wrappedPackages) wrappedPkgs;
