@@ -15533,6 +15533,8 @@ in
 
   firejail = callPackage ../os-specific/linux/firejail {};
 
+  oz = callPackage ../os-specific/linux/os {};
+
   fnotifystat = callPackage ../os-specific/linux/fnotifystat { };
 
   forkstat = callPackage ../os-specific/linux/forkstat { };
