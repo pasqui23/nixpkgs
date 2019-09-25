@@ -7,10 +7,11 @@ buildGoModule rec {
     owner = "subgraph";
     repo = "oz";
     rev = version;
-    sha256 = "";
+    hash = "sha256-x0p376/IPGWf99p9CveJBSAaW6A62IPOKUNaSaSF66Q=";
   };
   buildInputs = [acl];
 
   subPackages = [ "." ];
+  modSha256 = "lfZTK/ENpEHYes6sgysmdHA8Xggz5A2Q000i42FJF/o=";
 
 }

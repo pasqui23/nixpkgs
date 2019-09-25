@@ -15533,7 +15533,7 @@ in
 
   firejail = callPackage ../os-specific/linux/firejail {};
 
-  oz = callPackage ../os-specific/linux/os {};
+  oz = callPackage ../os-specific/linux/oz {};
 
   fnotifystat = callPackage ../os-specific/linux/fnotifystat { };
 
