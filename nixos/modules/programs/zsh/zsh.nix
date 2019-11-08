@@ -125,6 +125,10 @@ in
         type = types.bool;
       };
 
+      zcompile = mkEnableOption "precompilation of zsh functions and builtins"//{
+        default = true;
+      };
+
     };
 
   };
@@ -231,6 +235,16 @@ in
       ++ optional cfg.enableCompletion pkgs.nix-zsh-completions;
 
     environment.pathsToLink = optional cfg.enableCompletion "/share/zsh";
+
+    environment.extraSetup =
+      optionalString (cfg.enableCompletion && cfg.zcompile) (toString (pkgs.writeScript "zcompile-step" ''
+        #!${pkgs.zsh}/bin/zsh
+        setopt null_glob
+        O=$out/share/zsh
+        fpath=( $O/{site-functions,$ZSH_VERSION/functions,vendor-completions} )
+        zcompile -ca "$O/site-functions"
+        # rm -f $fpath
+      ''));
 
     #users.defaultUserShell = mkDefault "/run/current-system/sw/bin/zsh";
 
