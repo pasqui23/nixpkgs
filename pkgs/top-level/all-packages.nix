@@ -385,6 +385,8 @@ in
 
   fetchgx = callPackage ../build-support/fetchgx { };
 
+  fetchAny = callPackage ../build-support/fetchAny { };
+
   resolveMirrorURLs = {url}: fetchurl {
     showURLs = true;
     inherit url;

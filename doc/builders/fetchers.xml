@@ -146,5 +146,15 @@ stdenv.mkDerivation {
     </para>
    </listitem>
   </varlistentry>
+  <varlistentry>
+   <term>
+    <literal>fetchAny</literal>
+   </term>
+   <listitem>
+    <para>
+     This function,taking a list of fixed-output derivations,allows to combine several fetcher and to try them in order,outputting the first that succeeds.It requires adding <literal>"recursive-nix"</literal> to <literal>system-features</literal> and <literal>experimantal-features</literal> in <literal>nix.conf</literal>.See the Nix manual for ulterior details.
+    </para>
+   </listitem>
+  </varlistentry>
  </variablelist>
 </chapter>
