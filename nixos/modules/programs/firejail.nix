@@ -4,35 +4,61 @@ with lib;
 
 let
   cfg = config.programs.firejail;
+  fj=pkgs.firejail;
 
-  wrappedBins = pkgs.runCommand "firejail-wrapped-binaries"
-    { preferLocalBuild = true;
-      allowSubstitutes = false;
-    }
-    ''
+  wrapPkgs = ''
+    pwd | read _oldDir
+    for $bin in $out/{,s}bin
+    do
+      cd $bin
+
+      for $c in *
+      do
+        readlink $c | read original
+        profile="${fj}/etc/firejail/$c.profile"
+        if [[ -e "$profile" ]];then
+          outc=$out/$bin/$c
+          cat <<_EOF >$outc
+          #!${pkgs.stdenv.shell} -e
+
+          exec -a "$0" /run/wrappers/bin/firejail $original "\$@"
+
+          _EOF
+
+          chmod 0755 $outc
+        fi
+      done
+    done
+    cd $_oldDir
+  '';
+
+  wrappedBins = pkgs.stdenv.mkDerivation rec {
+    name = "firejail-wrapped-binaries";
+    nativeBuildInputs = with pkgs; [ makeWrapper ];
+    buildCommand = ''
       mkdir -p $out/bin
       ${lib.concatStringsSep "\n" (lib.mapAttrsToList (command: binary: ''
-        cat <<_EOF >$out/bin/${command}
-        #! ${pkgs.runtimeShell} -e
-        exec /run/wrappers/bin/firejail ${binary} "\$@"
-        _EOF
-        chmod 0755 $out/bin/${command}
+      cat <<_EOF >$out/bin/${command}
+      #!${pkgs.stdenv.shell} -e
+      exec -a "$0" /run/wrappers/bin/firejail ${binary} "\$@"
+      _EOF
+      chmod 0755 $out/bin/${command}
       '') cfg.wrappedBinaries)}
     '';
+  };
 
 in {
+  disabledModules=["programs/firejail.nix"];
   options.programs.firejail = {
     enable = mkEnableOption "firejail";
 
+    wrapAllPackages = mkEnableOption "automatic setup of links and desktop files installed" // {
+      default = true;
+    };
+
     wrappedBinaries = mkOption {
-      type = types.attrsOf types.path;
+      type = types.attrs;
       default = {};
-      example = literalExample ''
-        {
-          firefox = "''${lib.getBin pkgs.firefox}/bin/firefox";
-          mpv = "''${lib.getBin pkgs.mpv}/bin/mpv";
-        }
-      '';
       description = ''
         Wrap the binaries in firejail and place them in the global path.
         </para>
@@ -45,9 +71,11 @@ in {
   };
 
   config = mkIf cfg.enable {
-    security.wrappers.firejail.source = "${lib.getBin pkgs.firejail}/bin/firejail";
+    security.wrappers.firejail.source = "${lib.getBin fj}/bin/firejail";
 
-    environment.systemPackages = [ pkgs.firejail ] ++ [ wrappedBins ];
+    environment.systemPackages = [ wrappedBins ] ;
+
+    environment.extraSetup = optionalString cfg.wrapAllPackages wrapPkgs;
   };
 
   meta.maintainers = with maintainers; [ peterhoeg ];
