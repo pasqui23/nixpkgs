@@ -590,6 +590,8 @@ in {
 
   cocotb = callPackage ../development/python-modules/cocotb { };
 
+  comic-dl = callPackage ../development/python-modules/comic-dl { };
+
   compiledb = callPackage ../development/python-modules/compiledb { };
 
   connexion = callPackage ../development/python-modules/connexion { };
