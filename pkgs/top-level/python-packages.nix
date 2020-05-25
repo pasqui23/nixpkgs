@@ -5598,6 +5598,8 @@ in {
 
   readthedocs-sphinx-ext = callPackage ../development/python-modules/readthedocs-sphinx-ext { };
 
+  rebound-cli = callPackage ../development/python-modules/rebound {};
+
   requests-http-signature = callPackage ../development/python-modules/requests-http-signature { };
 
   requirements-detector = callPackage ../development/python-modules/requirements-detector { };
