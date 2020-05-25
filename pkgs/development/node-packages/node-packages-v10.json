@@ -9,6 +9,7 @@
 , "@webassemblyjs/wasm-strip"
 , "@webassemblyjs/wasm-text-gen"
 , "@webassemblyjs/wast-refmt"
+, "add-gitignore"
 , "alloy"
 , "asar"
 , "bash-language-server"
