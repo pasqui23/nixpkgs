@@ -22148,6 +22148,8 @@ with pkgs;
 
   cariddi = callPackage ../tools/security/cariddi { };
 
+  Carl = callPackage ../data/themes/carl {};
+
   checkpolicy = callPackage ../os-specific/linux/checkpolicy { };
 
   checksec = callPackage ../os-specific/linux/checksec { };
