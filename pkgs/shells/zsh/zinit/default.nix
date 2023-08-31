@@ -9,6 +9,9 @@ stdenvNoCC.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-Gps7s26qqEjQPDhhSJr9u5SuRNRJnmayKfw45Ygjcd8=";
   };
+  patches = [
+    ./no-doc-copy.patch
+  ];
   # adapted from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=zsh-zplugin-git
   dontBuild = true;
   strictDeps = true;
