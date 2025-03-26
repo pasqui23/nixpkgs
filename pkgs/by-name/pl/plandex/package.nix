@@ -5,7 +5,7 @@
 }:
 buildGoModule rec {
   pname = "plandex";
-  version = "1.1.1";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "plandex-ai";
